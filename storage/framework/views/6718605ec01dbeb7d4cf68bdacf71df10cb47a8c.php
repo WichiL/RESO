@@ -1,0 +1,1 @@
+<?php /**PATH /home/wichi/Documentos/Proyectos/RedSocial/resources/views/admin/publicaciones/create.blade.php ENDPATH**/ ?>
