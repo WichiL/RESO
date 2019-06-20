@@ -13,9 +13,8 @@
 <?php $__env->startSection('content'); ?>
 
 <div class="row">
-	<form method="POST" action="<?php echo e(route('admin.posts.store')); ?>">
-		<?php echo e(csrf_field()); ?>
-
+	<form method="POST" action="<?php echo e(route('admin.posts.update', $post)); ?>">
+		<?php echo e(csrf_field()); ?> <?php echo e(method_field('PUT')); ?>		
 		<div class="col-md-8">
 			<div class="box box-primary">
 			    
@@ -23,18 +22,18 @@
 			   			<div class="form-group <?php echo e($errors->has('title') ? 'has-error' : ''); ?>">
 			   				<label>Titulo de la Publicación</label>
 			   				<input name="title" class="form-control" placeholder="Ingrese aqui el titulo de la publicación"
-			   				value="<?php echo e(old('title')); ?>">
+			   				value="<?php echo e(old('title', $post->title)); ?>">
 			   				<?php echo $errors->first('title', '<span class="help-block">:message</span>'); ?>
 
-
-
 			   			</div>
+
 			    		<div class="form-group <?php echo e($errors->has('body') ? 'has-error' : ''); ?>">
 			    			<label>Contenido de la publicación</label>
-			    			<textarea id="editor" rows="10" name="body" class="form-control" placeholder="Ingresa el contenido completo de la publicación..."><?php echo e(old('body')); ?></textarea>
+			    			<textarea id="editor" rows="10" name="body" class="form-control" placeholder="Ingresa el contenido completo de la publicación..."><?php echo e(old('body', $post->body)); ?></textarea>
 			    			<?php echo $errors->first('body', '<span class="help-block">:message</span>'); ?>
 
-			    		</div>		    		
+			    		</div>
+
 			   	 	</div>		   
 			</div>		
 		</div>	
@@ -47,7 +46,8 @@
 			                <div class="input-group-addon">
 				                <i class="fa fa-calendar"></i>
 			                </div>
-			                <input name="published_at" type="text" class="form-control pull-right" id="datepicker" value="<?php echo e(old('published_at')); ?>">
+			                <input name="published_at" type="text" class="form-control pull-right" id="datepicker" 
+			                value="<?php echo e(old('published_at', $post->published_at ? $post->published_at->format('m/d/Y') : null)); ?>">
 			            </div>
 			        </div>	
 			        <div class="form-group <?php echo e($errors->has('category') ? 'has-error' : ''); ?>" >
@@ -56,7 +56,7 @@
 			        		<option value="">Selecciona una categoria</option>
 			        		<?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 			        			<option value="<?php echo e($category->id); ?>"
-			        			 <?php echo e(old('category') == $category->id ? 'selected' : ''); ?>><?php echo e($category->name); ?></option>
+			        			 <?php echo e(old('category', $post->category_id) == $category->id ? 'selected' : ''); ?>><?php echo e($category->name); ?></option>
 			        		<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 			        	</select>
 			        	<?php echo $errors->first('category', '<span class="help-block">:message</span>'); ?>
@@ -68,7 +68,7 @@
 						<select name="tags[]" class="form-control select2" multiple="multiple" data-placeholder="Selecciona una o más etiquetas"
                         style="width: 100%;">
 		             	<?php $__currentLoopData = $tags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-		             		<option <?php echo e(collect(old('tags'))->contains($tag->id) ? 'selected' : ''); ?> value="<?php echo e($tag->id); ?>"><?php echo e($tag->name); ?></option>
+		             		<option <?php echo e(collect(old('tags', $post->tags->pluck('id')))->contains($tag->id) ? 'selected' : ''); ?> value="<?php echo e($tag->id); ?>"><?php echo e($tag->name); ?></option>
 		             	<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 		                </select><?php echo $errors->first('tags', '<span class="help-block">:message</span>'); ?>
 
@@ -76,10 +76,15 @@
 
 			    	<div class="form-group <?php echo e($errors->has('excerpt') ? 'has-error' : ''); ?>">
 			    		<label>Extracto de la publicación</label>
-			    		<textarea name="excerpt" class="form-control" placeholder="Ingresa un extracto de la publicación..."><?php echo e(old('excerpt')); ?></textarea>
+			    		<textarea name="excerpt" class="form-control" placeholder="Ingresa un extracto de la publicación..."><?php echo e(old('excerpt', $post->excerpt)); ?></textarea>
 			    		<?php echo $errors->first('excerpt', '<span class="help-block">:message</span>'); ?>
 
-			    	</div>		
+			    	</div>	
+
+			    	<div class="form-group">
+			    		<div class="dropzone"></div>
+
+			    	</div>	
 
 			    	<div class="form-group">
 			    		<button type="submit" class="btn btn-primary btn-block">Guardar Publicación</button>
@@ -96,6 +101,7 @@
 <?php $__env->startPush('styles'); ?>
 	<link rel="stylesheet" href="/adminLTE/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 	<link rel="stylesheet" href="/adminLTE/plugins/select2/dist/css/select2.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
 
 <?php $__env->stopPush(); ?>
 
@@ -106,14 +112,24 @@
 
 	<script src="/adminLTE/plugins/select2/dist/js/select2.full.min.js"></script>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+
 	<script type="text/javascript">
 		$('#datepicker').datepicker({
      		autoclose: true
     	})
     	CKEDITOR.replace('editor');
     	 $('.select2').select2();
+
+    	 new Dropzone(".dropzone", {
+    	 	url: '/admin/posts/<?php echo e($post->url); ?>/photos',
+    	 	headers: {
+    	 		'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
+    	 	},
+    	 	dictDefaultMessage: 'Arrastra las imagenes aqui para subirlas'
+    	 });
+    	 Dropzone.autoDiscover = false;
 	</script>
 	</script>
 <?php $__env->stopPush(); ?>
-
 <?php echo $__env->make('admin.layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/wichi/Documentos/Proyectos/RedSocial/resources/views/admin/publicaciones/edit.blade.php ENDPATH**/ ?>

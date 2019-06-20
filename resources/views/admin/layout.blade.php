@@ -390,6 +390,7 @@ desired effect
 @stack('scripts')
 <!-- adminLTE App -->
 <script src="/adminLTE/js/adminlte.min.js"></script>
+@include('admin.publicaciones.create')
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

@@ -18,12 +18,12 @@ class PostsController extends Controller
 
     }
 
-    public function create()
-    {
-    	$categories = Category::all();
-    	$tags = Tag::all();
-    	return view('admin.publicaciones.create', compact('categories', 'tags'));
-    }
+    // public function create()
+    // {
+    // 	$categories = Category::all();
+    // 	$tags = Tag::all();
+    // 	return view('admin.publicaciones.create', compact('categories', 'tags'));
+    // }
 
     public function store(Request $request)
     {
@@ -31,41 +31,42 @@ class PostsController extends Controller
         
         $post = Post::create([
             'title' => $request->get('title'),
-            'url' => str_slug($request->get('url'))
+            'url' => str_slug($request->get('title')),
         ]);
 
         return redirect()->route('admin.posts.edit', $post);
     }
  
-    public function edit(POST $post)
+    public function edit(Post $post)
     {
-        return view('admin.publicaciones.edit', compact('post')); 
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('admin.publicaciones.edit', compact('categories', 'tags', 'post'));
+
     }
 
 
 
-    // public function store(Request $request)
-    // {
-    // 	//validacion
-    // 	$this->validate($request, [
-    // 		'title' => 'required',
-    // 		'body' => 'required',
-    // 		'category' => 'required',
-    // 		'excerpt' => 'required',
-    // 		'tags' => 'required'
-    // 	]);
-    // 	// return Post::create($request->all());
+    public function update(Post $post, Request $request)
+    {
+    	//validacion
+    	$this->validate($request, [
+    		'title' => 'required',
+    		'body' => 'required',
+    		'category' => 'required',
+    		'excerpt' => 'required',
+    		'tags' => 'required'
+    	]);
 
-    // 	$post = new Post;
-    //     $post->title = $request->get('title');
-    // 	$post->url = str_slug($request->get('title'));
-    // 	$post->body = $request->get('body');
-    // 	$post->excerpt = $request->get('excerpt');
-    // 	$post->published_at = $request->has('published_at') ? Carbon::parse($request->get('published_at')) : null;
-    // 	$post->category_id = $request->get('category');
-    // 	$post->save();
+        $post->title = $request->get('title');
+    	$post->url = str_slug($request->get('title'));
+    	$post->body = $request->get('body');
+    	$post->excerpt = $request->get('excerpt');
+    	$post->published_at = $request->has('published_at') ? Carbon::parse($request->get('published_at')) : null;
+    	$post->category_id = $request->get('category');
+    	$post->save();
 
-    // 	$post->tags()->attach($request->get('tags'));
-    // 	return back()->with('flash', "La publicación ha sido creada");
-    // }
+    	$post->tags()->attach ($request->get('tags'));
+    	return redirect()->route('admin.posts.edit', $post)->with('flash', "La publicación ha sido actualizada");
+    }
 }
