@@ -121,12 +121,20 @@
     	CKEDITOR.replace('editor');
     	 $('.select2').select2();
 
-    	 new Dropzone(".dropzone", {
+    	 var myDropzone = new Dropzone(".dropzone", {
     	 	url: '/admin/posts/<?php echo e($post->url); ?>/photos',
+    	 	// acceptedFiles: 'image/*',
+    	 	// maxFilesize: 2,
+    	 	paramName: 'photo',
     	 	headers: {
     	 		'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
     	 	},
     	 	dictDefaultMessage: 'Arrastra las imagenes aqui para subirlas'
+    	 });
+
+    	 myDropzone.on('error', function(file, res){
+    	 	var msg = res.photo[0];
+    	 	$('.dz-error-message > span').text(msg);
     	 });
     	 Dropzone.autoDiscover = false;
 	</script>
