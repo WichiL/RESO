@@ -383,7 +383,7 @@ desired effect
 <?php echo $__env->yieldPushContent('scripts'); ?>
 <!-- adminLTE App -->
 <script src="/adminLTE/js/adminlte.min.js"></script>
-<?php echo $__env->make('admin.publicaciones.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('admin.posts.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

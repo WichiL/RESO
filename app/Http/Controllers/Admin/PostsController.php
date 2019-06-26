@@ -14,7 +14,7 @@ class PostsController extends Controller
     public function index()
     {
     	$posts = Post::all();
-    	return view('admin.publicaciones.index', compact('posts'));
+    	return view('admin.posts.index', compact('posts'));
 
     }
 
@@ -22,7 +22,7 @@ class PostsController extends Controller
     // {
     // 	$categories = Category::all();
     // 	$tags = Tag::all();
-    // 	return view('admin.publicaciones.create', compact('categories', 'tags'));
+    // 	return view('admin.posts.create', compact('categories', 'tags'));
     // }
 
     public function store(Request $request)
@@ -41,7 +41,7 @@ class PostsController extends Controller
     {
         $categories = Category::all();
         $tags = Tag::all();
-        return view('admin.publicaciones.edit', compact('categories', 'tags', 'post'));
+        return view('admin.posts.edit', compact('categories', 'tags', 'post'));
 
     }
 
@@ -67,6 +67,7 @@ class PostsController extends Controller
     	$post->save();
 
     	$post->tags()->attach ($request->get('tags'));
+
     	return redirect()->route('admin.posts.edit', $post)->with('flash', "La publicación ha sido actualizada");
     }
 }

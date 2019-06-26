@@ -5,11 +5,26 @@
     <section class="posts container">
         
         @foreach($posts as $post)
-        <article class="post no-image">
+        <article class="post">
+            @if($post->photos->count() === 1)
+              <figure><img src="{{ $post->photos->first()->url }}" alt="" class="img-responsive"></figure>
+            @elseif($post->photos->count() > 1)
+             <div class="gallery-photos masonry" data-masonry='{ "itemSelector" : ".grid-item", "columnWidth" : 464}'>
+                @foreach ($post->photos->take(4) as $photo)
+                   <figure class="grid-item grid-item--height2">
+                       @if ($loop->iteration === 4)
+                           <div class="overlay">{{ $post->photos->count() }} Fotos</div>
+                        @endif
+                            <img src="{{ url($photo->url) }}" class="img-responsive">
+                   </figure>
+                @endforeach
+              </div>
+            @endif
+            
             <div class="content-post">
                 <header class="container-flex space-between">
                     <div class="date">
-                        <span class="c-gray-1">{{ $post->published_at->format('M d') }}</span>
+                        <span class="c-gris">{{ $post->published_at->format('M d') }}</span>
                     </div>
                     <div class="post-category">
                         <span class="category text-capitalize">{{ $post->category->name }}</span>
@@ -18,13 +33,14 @@
                 <h1>{{ $post->title }}</h1>
                 <div class="divider"></div>
                 <p>{{ $post->excerpt }}</p>
+                
                 <footer class="container-flex space-between">
                     <div class="read-more">
                         <a href="convocatorias/{{ $post->url }}" class="text-uppercase c-green">Abrir Convocatoria</a>
                     </div>
                     <div class="tags container-flex">
                         @foreach($post->tags as $tag)
-                        <span class="tag c-gray-1 text-capitalize">#{{ $tag->name }}</span>
+                            <span class="tag c-gray-1 text-capitalize">#{{ $tag->name }}</span>
                         @endforeach
                     </div>
                 </footer>

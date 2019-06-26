@@ -1,6 +1,6 @@
 .container{
-	padding-right: 15px;
-  	padding-left: 15px;
+/*	padding-right: 15px;
+  	padding-left: 15px;*/
   	margin-right: auto;
   	margin-left: auto;
 }
@@ -116,9 +116,13 @@
 }
 
 .img-responsive{
+    /*width: 60%;
+	display: block;*/
 	max-width: 100%;
-	height: auto;
-	display: block;
+	margin: 10px auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 .space-inter{
 	padding: 35px 5px;

@@ -76,11 +76,10 @@
 			    		<label>Extracto de la publicación</label>
 			    		<textarea name="excerpt" class="form-control" placeholder="Ingresa un extracto de la publicación...">{{ old('excerpt', $post->excerpt) }}</textarea>
 			    		{!! $errors->first('excerpt', '<span class="help-block">:message</span>') !!}
-			    	</div>	
+			        	</div>	
 
 			    	<div class="form-group">
 			    		<div class="dropzone"></div>
-
 			    	</div>	
 
 			    	<div class="form-group">
@@ -120,9 +119,9 @@
 
     	 var myDropzone = new Dropzone(".dropzone", {
     	 	url: '/admin/posts/{{ $post->url }}/photos',
-    	 	// acceptedFiles: 'image/*',
-    	 	// maxFilesize: 2,
-    	 	paramName: 'photo',
+    	 	acceptedFiles: 'image/*',
+    	 	maxFilesize: 2,
+    	 	paramName: 'foto',
     	 	headers: {
     	 		'X-CSRF-TOKEN': '{{ csrf_token() }}'
     	 	},
@@ -130,9 +129,11 @@
     	 });
 
     	 myDropzone.on('error', function(file, res){
-    	 	var msg = res.photo[0];
-    	 	$('.dz-error-message > span').text(msg);
+
+    	 	var msg = "La " + res.errors.foto[0];
+    	 	$('.dz-error-message:last > span').text(msg);
     	 });
+
     	 Dropzone.autoDiscover = false;
 	</script>
 @endpush

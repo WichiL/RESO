@@ -45,7 +45,12 @@ return [
 
         'local' => [
             'driver' => 'local',
+             //para guardar en la carpeta storage *Requiere de un Symbolic Link:
+             //php artisan storage:link
             'root' => storage_path('app'),
+
+            //Para guardar en la carpeta public
+            // 'root' => public_path('img'), 
         ],
 
         'public' => [

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', 'PagesController@home');
-Route::get('convocatorias/{post}', 'PostsController@show');
+Route::get('convocatorias/{post}', 'PostsController@show')->name('posts.show');
 
 
 Route::get('posts', function(){

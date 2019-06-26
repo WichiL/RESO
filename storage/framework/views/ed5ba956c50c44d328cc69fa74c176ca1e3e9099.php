@@ -123,9 +123,9 @@
 
     	 var myDropzone = new Dropzone(".dropzone", {
     	 	url: '/admin/posts/<?php echo e($post->url); ?>/photos',
-    	 	// acceptedFiles: 'image/*',
-    	 	// maxFilesize: 2,
-    	 	paramName: 'photo',
+    	 	acceptedFiles: 'image/*',
+    	 	maxFilesize: 2,
+    	 	paramName: 'foto',
     	 	headers: {
     	 		'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
     	 	},
@@ -133,11 +133,12 @@
     	 });
 
     	 myDropzone.on('error', function(file, res){
-    	 	var msg = res.photo[0];
-    	 	$('.dz-error-message > span').text(msg);
+
+    	 	var msg = "La " + res.errors.foto[0];
+    	 	$('.dz-error-message:last > span').text(msg);
     	 });
+
     	 Dropzone.autoDiscover = false;
-	</script>
 	</script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('admin.layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/wichi/Documentos/Proyectos/RedSocial/resources/views/admin/publicaciones/edit.blade.php ENDPATH**/ ?>
