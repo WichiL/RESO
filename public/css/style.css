@@ -19,6 +19,10 @@
     overflow: hidden;
 }
 
+.carousel-inner .item img{
+	width: 100%;
+}
+
 body{
 	background: #f7f9fc;
 	font-family: 'lato', sans-serif;

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends Controller
 {
-	  public function store(Post $post)
+	public function store(Post $post)
     {
 
     	$this->validate(request(), [
@@ -28,5 +28,13 @@ class PhotosController extends Controller
     		'post_id' => $post->id
 
     	]);
+    }
+
+    public function destroy(Photo $photo)
+    {
+        $photo->delete(); //Borramos registro de la base de datos
+        $photoPath = str_replace('storage', 'public', $photo->url); //Mandamos a llamar la url de la foto y reemplazamos 'storage' por 'public'
+        Storage::delete($photo->url); 
+        return back()->with('flash', 'Foto eliminada');
     }
 }

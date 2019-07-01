@@ -5,8 +5,18 @@
 
 <article class="post container">
     <?php if($post->photos->count() === 1): ?>
-        <figure><img src="<?php echo e($post->photos->first()->url); ?>" alt="" class="img-responsive"></figure>
+      <figure><img src="<?php echo e($post->photos->first()->url); ?>" alt="" class="img-responsive"></figure> 
+    <?php elseif($post->photos->count() > 1): ?>
+      <?php echo $__env->make('convocatorias.carousel', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?> 
+    <?php elseif($post->iframe): ?>
+      <div class="video">
+         <?php echo $post->iframe; ?>
+
+      </div>
     <?php endif; ?>
+
+    
+
     <div class="content-post">
       <header class="container-flex space-between">
         <div class="date">
@@ -46,7 +56,17 @@
 
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startPush('styles'); ?>
+  <link rel="stylesheet" type="text/css" href="/css/twitter-bootstrap.css">  
+<?php $__env->stopPush(); ?>
+
 <?php $__env->startPush('scripts'); ?>
     <script id="dsq-count-scr" src="//zendero.disqus.com/count.js" async></script>
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+    </script>
+    <script id="dsq-count-scr" src="/js/twitter-bootstrap.js " async></script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/wichi/Documentos/Proyectos/RedSocial/resources/views/convocatorias/show.blade.php ENDPATH**/ ?>

@@ -15,29 +15,83 @@
 @section('content')
 
 <div class="row">
+	@if ($post->photos->count())
+		<div class="col-md-12">
+			<div class="box-body">
+				<div class="box box-primary">
+					<div class="row">
+		    			@foreach ($post->photos as $photo)
+			    			<form method="POST" action="{{ route('admin.photos.destroy', $photo) }}">
+			    				{{ method_field('DELETE') }} {{ csrf_field() }}
+			    				<div class="col-md-2">
+			    					<button class="btn btn-danger btn-xs" style="position: absolute;">
+			    						<i class="fa fa-remove"></i>
+			    					</button>
+			    					<img class="img-responsive" src="{{ url($photo->url) }}">
+			    				 </div>
+			    			</form>
+		    			@endforeach		    			
+		    		</div>
+				</div>	
+			</div>
+		</div>
+	@endif
+	
 	<form method="POST" action="{{ route('admin.posts.update', $post) }}">
 		{{ csrf_field() }} {{ method_field('PUT') }}		
 		<div class="col-md-8">
 			<div class="box box-primary">
-			    
-			   		<div class="box-body">
-			   			<div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
-			   				<label>Titulo de la Publicación</label>
-			   				<input name="title" class="form-control" placeholder="Ingrese aqui el titulo de la publicación"
-			   				value="{{ old('title', $post->title)}}">
-			   				{!! $errors->first('title', '<span class="help-block">:message</span>') !!}
-			   			</div>
+			    <div class="box-body">
+		   			<div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
+		   				<label>Titulo de la Publicación</label>
+		   				<input name="title" class="form-control" placeholder="Ingrese aqui el titulo de la publicación"
+		   				value="{{ old('title', $post->title)}}">
+		   				{!! $errors->first('title', '<span class="help-block">:message</span>') !!}
+		   			</div>
 
-			    		<div class="form-group {{ $errors->has('body') ? 'has-error' : '' }}">
-			    			<label>Contenido de la publicación</label>
-			    			<textarea id="editor" rows="10" name="body" class="form-control" placeholder="Ingresa el contenido completo de la publicación...">{{ old('body', $post->body) }}</textarea>
-			    			{!! $errors->first('body', '<span class="help-block">:message</span>') !!}
-			    		</div>
+		    		<div class="form-group {{ $errors->has('body') ? 'has-error' : '' }}">
+		    			<label>Contenido de la publicación</label>
+		    			<textarea id="editor" rows="10" name="body" class="form-control" placeholder="Ingresa el contenido completo de la publicación...">{{ old('body', $post->body) }}</textarea>
+		    			{!! $errors->first('body', '<span class="help-block">:message</span>') !!}
+		    		</div>
+					
+					<div class="form-group {{ $errors->has('iframe') ? 'has-error' : '' }}">
+		    			<label>Multimedia</label>
+		    			<textarea id="editor" rows="2" name="iframe" class="form-control" placeholder="Ingresa el contenido contenido de audio o video...">{{ old('iframe', $post->iframe) }}</textarea>
+		    			{!! $errors->first('iframe', '<span class="help-block">:message</span>') !!}
+		    		</div>
 
-			   	 	</div>		   
+		   	 	</div>		   
 			</div>		
 		</div>	
 		<div class="col-md-4">
+			<div class="box box-primary">
+				<div class="box-body">
+					<div class="form-group">
+						<div class="form-group">
+		                  <label for="exampleInputFile">Video</label>
+		                  <div class="col-md-3">
+		                  	<input id="exampleInputFile" type="file">
+		                  	<p class="help-block">Seleccione un video...</p>	
+		                  </div>
+		                </div>
+						<form method="POST" action="{{ route('admin.posts.update', $post) }}">
+							{{ csrf_field() }} {{ method_field('PUT') }}	
+							@if($post->video)
+								<video id='my-video' class='video-js' controls preload='auto' width='400' height='264'
+								  poster='MY_VIDEO_POSTER.jpg' data-setup='{}'>
+								    <source src='MY_VIDEO.mp4' type='video/mp4'>
+								    <source src='MY_VIDEO.webm' type='video/webm'>
+								    <p class='vjs-no-js'>
+								      To view this video please enable JavaScript, and consider upgrading to a web browser that
+								      <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
+								    </p>
+							  	</video>
+						  	@endif
+						</form>
+					</div>					
+				</div>	
+			</div>
 			<div class="box box-primary">
 				<div class="box-body">
 			        <div class="form-group">
@@ -84,7 +138,7 @@
 
 			    	<div class="form-group">
 			    		<button type="submit" class="btn btn-primary btn-block">Guardar Publicación</button>
-			    	</div>		
+			    	</div>		 
 				</div>
 			</div>
 		</div>	
@@ -115,6 +169,7 @@
      		autoclose: true
     	})
     	CKEDITOR.replace('editor');
+    	CKEDITOR.config.height = 315;
     	 $('.select2').select2();
 
     	 var myDropzone = new Dropzone(".dropzone", {
@@ -135,5 +190,6 @@
     	 });
 
     	 Dropzone.autoDiscover = false;
+
 	</script>
 @endpush

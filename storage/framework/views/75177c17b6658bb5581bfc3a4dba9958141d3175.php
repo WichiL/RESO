@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/css/responsive.css">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-    <?php echo $__env->yieldPushContent('scripts'); ?>
+    <?php echo $__env->yieldPushContent('styles'); ?>
 
 </head>
 <body>
@@ -60,6 +60,6 @@
             </div>
         </footer>
     </section>
-    
 </body>
+<?php echo $__env->yieldPushContent('scripts'); ?>
 </html><?php /**PATH /home/wichi/Documentos/Proyectos/RedSocial/resources/views/layout.blade.php ENDPATH**/ ?>

@@ -1,22 +1,26 @@
 <?php $__env->startSection('content'); ?>
 
     <section class="posts container">
-        
         <?php $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <article class="post">
             <?php if($post->photos->count() === 1): ?>
               <figure><img src="<?php echo e($post->photos->first()->url); ?>" alt="" class="img-responsive"></figure>
             <?php elseif($post->photos->count() > 1): ?>
-             <div class="gallery-photos masonry" data-masonry='{ "itemSelector" : ".grid-item", "columnWidth" : 464}'>
-                <?php $__currentLoopData = $post->photos->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $photo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                   <figure class="grid-item grid-item--height2">
-                       <?php if($loop->iteration === 4): ?>
-                           <div class="overlay"><?php echo e($post->photos->count()); ?> Fotos</div>
-                        <?php endif; ?>
+                <div class="gallery-photos masonry" data-masonry='{ "itemSelector" : ".grid-item", "columnWidth" : 464}'>
+                    <?php $__currentLoopData = $post->photos->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $photo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <figure class="grid-item grid-item--height2">
+                            <?php if($loop->iteration === 4): ?>
+                                <div class="overlay"><?php echo e($post->photos->count()); ?> Fotos</div>
+                            <?php endif; ?>
                             <img src="<?php echo e(url($photo->url)); ?>" class="img-responsive">
-                   </figure>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-              </div>
+                        </figure>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            <?php elseif($post->iframe): ?>
+                <div class="video">
+                   <?php echo $post->iframe; ?>
+
+                </div>
             <?php endif; ?>
             
             <div class="content-post">
